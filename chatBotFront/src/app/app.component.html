@@ -1,0 +1,16 @@
+<div class="container">
+  <h1>{{ title }}</h1>
+
+  <!-- Sección del chatbot -->
+  <div class="chat-section">
+    <h2>ChatBot</h2>
+    <input [(ngModel)]="mensaje" placeholder="Escribe tu mensaje..." />
+    <button (click)="enviar()">Enviar</button>
+    <pre>{{ respuesta }}</pre>
+  </div>
+
+  <!-- Sección de información del Hackathon -->
+  <div class="hackathon-section">
+    <app-hackathon-info></app-hackathon-info>
+  </div>
+</div>
