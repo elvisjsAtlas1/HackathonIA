@@ -31,9 +31,9 @@ public class ChatController {
     @PostMapping("/message")
     public ResponseEntity<String> enviarMensaje(@RequestBody UserMessageRequest userRequest) {
         try {
-            System.out.println("Mensaje recibido: " + userRequest.getMessage());
-            String respuesta = groqChatService.enviarMensaje(userRequest.getMessage());
-            System.out.println("Respuesta: " + respuesta);
+            Long userId = userRequest.getUserId();  // Debes agregar userId en UserMessageRequest
+            String mensaje = userRequest.getMessage();
+            String respuesta = groqChatService.enviarMensaje(mensaje, userId);
             return ResponseEntity.ok(respuesta);
         } catch (Exception e) {
             e.printStackTrace();
@@ -41,4 +41,5 @@ public class ChatController {
                     .body("Error interno: " + e.getMessage());
         }
     }
+
 }

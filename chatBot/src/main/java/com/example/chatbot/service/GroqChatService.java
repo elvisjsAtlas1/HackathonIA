@@ -1,6 +1,7 @@
 package com.example.chatbot.service;
 
 import com.example.chatbot.dto.*;
+import com.example.chatbot.modelo.Catalogo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,30 +25,89 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
-
+import java.util.Optional;
+import java.util.stream.Collectors;
 @Service
 public class GroqChatService {
 
     private static final Logger log = LoggerFactory.getLogger(GroqChatService.class);
 
     private final WebClient webClient;
+    private final CatalogoService catalogoService;
 
-    public GroqChatService(WebClient groqWebClient) {
+    public GroqChatService(WebClient groqWebClient, CatalogoService catalogoService) {
         this.webClient = groqWebClient;
+        this.catalogoService = catalogoService;
     }
 
-    public String enviarMensaje(String mensaje) {
-        // Crear el mensaje de usuario
-        ChatMessage userMessage = new ChatMessage("user", mensaje);
+    public String enviarMensaje(String mensaje, Long userId) {
+        // Obtener datos contextuales según el mensaje y el userId
+        String datosContextuales = obtenerDatosContextuales(mensaje, userId);
 
-        // Crear el request (aquí asumo que tienes una clase ChatRequest definida aparte)
+        // Crear el prompt final a enviar al modelo
+        String prompt = """
+        El usuario dijo: "%s"
+        
+        Datos del sistema:
+        %s
+        
+        Responde de forma clara, útil y amigable.
+        """.formatted(mensaje, datosContextuales);
+
+        return enviarPromptAGroq(prompt);
+    }
+
+
+    private String obtenerDatosContextuales(String mensaje, Long userId) {
+        mensaje = mensaje.toLowerCase();
+
+        if (mensaje.contains("catalogo") || mensaje.contains("catálogo")) {
+            String nombreCatalogo = extraerNombreCatalogo(mensaje);
+            if (nombreCatalogo != null) {
+                Optional<CatalogoDTO> optCatalogo = catalogoService.getAllCatalogos().stream()
+                        .filter(c -> c.getNombre().toLowerCase().contains(nombreCatalogo))
+                        .findFirst();
+
+                if (optCatalogo.isPresent()) {
+                    CatalogoDTO catalogo = optCatalogo.get();
+                    return "Información del catálogo:\n" + convertirCatalogoATexto(catalogo);
+                } else {
+                    return "No se encontró ningún catálogo con el nombre '" + nombreCatalogo + "'.";
+                }
+            } else {
+                // No especificaron catálogo, devolvemos listado general de catálogos reales
+                List<CatalogoDTO> todosCatalogos = catalogoService.getAllCatalogos();
+                if (todosCatalogos.isEmpty()) {
+                    return "Actualmente no hay catálogos disponibles.";
+                } else {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Tenemos los siguientes catálogos disponibles:\n");
+                    for (CatalogoDTO c : todosCatalogos) {
+                        sb.append("- ").append(c.getNombre())
+                                .append(": ").append(c.getDescripcion())
+                                .append("\n");
+                    }
+                    sb.append("¿Cuál catálogo deseas consultar con más detalle?");
+                    return sb.toString();
+                }
+            }
+        }
+
+        // Otros casos por defecto...
+        return "No se encontraron datos relevantes en el sistema para esta consulta.";
+    }
+
+
+
+    private String enviarPromptAGroq(String prompt) {
+        ChatMessage userMessage = new ChatMessage("user", prompt);
+
         ChatRequest chatRequest = new ChatRequest();
-        chatRequest.setModel("llama3-8b-8192"); // tu modelo
+        chatRequest.setModel("llama3-8b-8192");
         chatRequest.setTemperature(0.7);
         chatRequest.setStream(false);
         chatRequest.setMessages(List.of(userMessage));
 
-        // Loggear el JSON que se enviará
         ObjectMapper mapper = new ObjectMapper();
         try {
             log.info("Request sent to Groq: {}", mapper.writeValueAsString(chatRequest));
@@ -55,7 +115,6 @@ public class GroqChatService {
             log.error("Error serializing chatRequest", e);
         }
 
-        // Enviar el request y obtener la respuesta
         ChatResponse chatResponse = webClient.post()
                 .uri("/chat/completions")
                 .bodyValue(chatRequest)
@@ -63,13 +122,43 @@ public class GroqChatService {
                 .bodyToMono(ChatResponse.class)
                 .block();
 
-        // Retornar la respuesta del chat (la primera opción)
         return chatResponse != null && chatResponse.getChoices() != null && !chatResponse.getChoices().isEmpty()
                 ? chatResponse.getChoices().get(0).getMessage().getContent()
                 : "No response from Groq API";
     }
+    private String convertirCatalogoATexto(CatalogoDTO catalogo) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID: ").append(catalogo.getId()).append("\n");
+        sb.append("Nombre: ").append(catalogo.getNombre()).append("\n");
+        sb.append("Descripción: ").append(catalogo.getDescripcion()).append("\n");
+        sb.append("Productos:\n");
+        if (catalogo.getProductos() == null || catalogo.getProductos().isEmpty()) {
+            sb.append("  No hay productos en este catálogo.\n");
+        } else {
+            for (ProductoDTO p : catalogo.getProductos()) {
+                sb.append("  - ID: ").append(p.getId())
+                        .append(", Nombre: ").append(p.getNombre())
+                        .append(", Descripción: ").append(p.getDescripcion())
+                        .append(", Precio: ").append(p.getPrecio())
+                        .append(", Disponible: ").append(p.isDisponible())
+                        .append("\n");
+            }
+        }
+        return sb.toString();
+    }
+    private String extraerNombreCatalogo(String mensaje) {
+        String[] palabras = mensaje.split("\\s+");
+        for (int i = 0; i < palabras.length; i++) {
+            if (palabras[i].contains("catalogo") || palabras[i].contains("catálogo")) {
+                if (i + 1 < palabras.length) {
+                    return palabras[i + 1].toLowerCase();
+                }
+            }
+        }
+        return null;
+    }
 
-    // Clases para mapear la respuesta JSON
+
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ChatResponse {
@@ -96,6 +185,4 @@ public class GroqChatService {
             this.message = message;
         }
     }
-
-
 }
