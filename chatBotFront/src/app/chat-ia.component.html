@@ -1,0 +1,14 @@
+<button (click)="toggleChat()" style="font-size: 24px; cursor: pointer;">
+  🤖 Hablar con IA
+</button>
+
+<div *ngIf="showChat" style="margin-top: 10px;">
+  <textarea [(ngModel)]="message" rows="3" cols="40" placeholder="Escribe tu mensaje aquí..."></textarea>
+  <br />
+  <button (click)="enviarMensaje()">Enviar</button>
+</div>
+
+<div *ngIf="response" style="margin-top: 15px; white-space: pre-wrap; border: 1px solid #ccc; padding: 10px;">
+  <strong>Respuesta IA:</strong>
+  <p>{{ response }}</p>
+</div>

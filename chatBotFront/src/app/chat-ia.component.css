@@ -1,0 +1,10 @@
+textarea {
+  width: 100%;
+  font-family: monospace;
+  font-size: 14px;
+  resize: vertical;
+}
+button {
+  margin-top: 5px;
+  padding: 6px 12px;
+}

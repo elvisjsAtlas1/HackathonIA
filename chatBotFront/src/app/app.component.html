@@ -1,16 +1,12 @@
-<div class="container">
-  <h1>{{ title }}</h1>
+<div style="text-align:center; margin-top: 50px;">
+  <h1>🤖 Chat IA</h1>
 
-  <!-- Sección del chatbot -->
-  <div class="chat-section">
-    <h2>ChatBot</h2>
-    <input [(ngModel)]="mensaje" placeholder="Escribe tu mensaje..." />
-    <button (click)="enviar()">Enviar</button>
+  <textarea [(ngModel)]="mensaje" placeholder="Escribe tu mensaje aquí..." rows="4" cols="50"></textarea>
+  <br><br>
+  <button (click)="enviar()">Enviar</button>
+
+  <div *ngIf="respuesta" style="margin-top: 20px;">
+    <h3>Respuesta de la IA:</h3>
     <pre>{{ respuesta }}</pre>
-  </div>
-
-  <!-- Sección de información del Hackathon -->
-  <div class="hackathon-section">
-    <app-hackathon-info></app-hackathon-info>
   </div>
 </div>

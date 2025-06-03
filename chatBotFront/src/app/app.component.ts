@@ -1,18 +1,17 @@
 import { Component } from '@angular/core';
-import { ChatService } from './chat-service';
-import {HackathonInfoComponent} from './hackathon-info.component';
+import { ChatService } from './chat.service';
 import {FormsModule} from '@angular/forms';
+import {NgIf} from '@angular/common'; // ✅ Importa el servicio
+import { CommonModule } from '@angular/common'; // 👈 Agrega esto
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  imports: [HackathonInfoComponent, FormsModule], // <-- Aquí importas el standalone component y FormsModule
-  standalone: true  // Y también este flag
+  imports: [CommonModule, FormsModule],
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'chatBotFront';
-
   mensaje = '';
   respuesta: any;
 
@@ -21,11 +20,9 @@ export class AppComponent {
   enviar() {
     this.chatService.enviarMensaje(this.mensaje).subscribe((res: any) => {
       try {
-        const json = JSON.parse(res);
-        const content = json.choices?.[0]?.message?.content || 'Sin respuesta válida';
-        this.respuesta = content;
+        this.respuesta = res;
       } catch (e) {
-        console.error('Error al parsear JSON:', e);
+        console.error('Error al parsear la respuesta:', e);
         this.respuesta = 'Error al interpretar la respuesta del servidor.';
       }
     });

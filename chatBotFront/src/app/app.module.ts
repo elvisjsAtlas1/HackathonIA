@@ -1,22 +1,18 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-import { HackathonInfoComponent } from './hackathon-info.component';
-import {AppComponent} from './app.component';
-import {RouterModule} from '@angular/router';
 
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import {AppComponent} from './app.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    HackathonInfoComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
-    FormsModule,    // <--- Debe estar aquí
-    RouterModule.forRoot([])
+    FormsModule,
+    HttpClientModule
   ],
   bootstrap: [AppComponent]
 })
