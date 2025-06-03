@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ChatIaComponent } from './chat-ia.component';
 import {FeaturedProductsComponent} from './featured-products.component';
-import {CategoriesComponent} from './categories.component'; // importa el componente
-
+import {CategoriesComponent} from './categories.component';
+import {Router, RouterLink} from '@angular/router'; // importa el componente
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ChatIaComponent, FeaturedProductsComponent,CategoriesComponent],// importa el componente aquí
+  imports: [ChatIaComponent, FeaturedProductsComponent, CategoriesComponent, RouterModule ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -19,7 +20,9 @@ export class AppComponent {
   response = '';
   userId = 1;
 
-  constructor(private http: HttpClient) {}
+  mostrarConoceMas: boolean = false;
+
+  constructor(private http: HttpClient, private router: Router) {}  // <-- Inyecta Router
 
   enviarMensaje() {
     if (!this.message.trim()) return;
@@ -38,6 +41,12 @@ export class AppComponent {
     this.message = '';
     this.response = '';
   }
+  abrirSobreNosotros() {
+    window.location.href = 'assets/sobre-nosotros.html';
+  }
+
+
+
 
   protected readonly scrollTo = scrollTo;
 

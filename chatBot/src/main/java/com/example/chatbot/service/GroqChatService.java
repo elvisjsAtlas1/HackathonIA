@@ -41,21 +41,33 @@ public class GroqChatService {
     }
 
     public String enviarMensaje(String mensaje, Long userId) {
-        // Obtener datos contextuales según el mensaje y el userId
+        String mensajeLower = mensaje.toLowerCase();
+
+        // 🔍 Si el mensaje se refiere a conocer la empresa, responder directamente
+        if (mensajeLower.contains("conocer más sobre la empresa") ||
+                mensajeLower.contains("infotel") ||
+                mensajeLower.contains("quiénes son ustedes") ||
+                mensajeLower.contains("qué es infotel")) {
+
+            return "Infotel Perú es una empresa especializada en soluciones tecnológicas, ofreciendo desarrollo de software, " +
+                    "soporte técnico y consultoría para impulsar tu transformación digital." +
+                    "si quieres conocer mas sobre nosotros presiona el boton para que tengas mas informacion";}
+
+        // 👇 Si no, usar el flujo normal con datos contextuales
         String datosContextuales = obtenerDatosContextuales(mensaje, userId);
 
-        // Crear el prompt final a enviar al modelo
         String prompt = """
         El usuario dijo: "%s"
-        
+
         Datos del sistema:
         %s
-        
+
         Responde de forma clara, útil y amigable.
         """.formatted(mensaje, datosContextuales);
 
         return enviarPromptAGroq(prompt);
     }
+
 
 
     private String obtenerDatosContextuales(String mensaje, Long userId) {

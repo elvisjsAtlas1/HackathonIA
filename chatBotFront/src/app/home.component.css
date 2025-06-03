@@ -1,0 +1,57 @@
+/* home.component.css */
+
+.hero-banner {
+  background: linear-gradient(135deg, #007bff, #00d4ff);
+  color: white;
+  padding: 60px 20px;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-radius: 8px;
+  margin: 20px auto;
+  max-width: 900px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.banner-content h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5em;
+}
+
+.banner-content p.intro-text {
+  font-size: 1.3rem;
+  margin-bottom: 1em;
+}
+
+.company-activities {
+  text-align: left;
+  max-width: 600px;
+  margin: 0 auto 1.5em auto;
+  padding-left: 20px;
+  list-style-type: disc;
+  font-size: 1.1rem;
+}
+
+.company-activities li {
+  margin-bottom: 0.7em;
+}
+
+.additional-info {
+  font-style: italic;
+  font-size: 1rem;
+  margin-bottom: 2em;
+}
+
+button {
+  background-color: #004aad;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #002d6b;
+}

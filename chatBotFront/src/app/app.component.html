@@ -10,30 +10,11 @@
     <a href="#" class="login">Inicio de Sesión</a>
     <a href="#" class="cart">🛒 Carrito</a>
   </nav>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </header>
 
-<section class="hero-banner">
-  <div class="banner-content">
-    <h1>Bienvenido a Infotel Perú</h1>
-    <p class="intro-text">
-      Infotel Business SAC es una empresa ubicada en Juliaca, dedicada a:
-    </p>
-
-    <ul class="company-activities">
-      <li>Importación de maquinaria para el sector textil y tecnológico.</li>
-      <li>Exportación de prendas de vestir a nivel nacional.</li>
-      <li>Atención del mercado local con prendas de vestir, accesorios para el hogar y artesanías.</li>
-    </ul>
-
-    <p class="additional-info">
-      También buscamos exportar artesanías locales.<br />
-      Nos enfocamos en conectar tecnología con tradición.
-    </p>
-
-    <button class="btn-primary">Conoce Mas Sobre Nosotros</button>
-  </div>
-</section>
-
+<router-outlet></router-outlet>
 
 <section class="categories">
   <h2>Categorías</h2>
@@ -56,18 +37,19 @@
 <!-- Icono de chat -->
 <app-chat-ia></app-chat-ia>
 
-
-
-
-
-
 <footer class="footer">
   <div class="footer-content">
     <p>&copy; 2025 Infotel Perú. Todos los derechos reservados.</p>
     <div class="social-media">
-      <a href="#">Facebook</a>
-      <a href="#">Instagram</a>
-      <a href="#">LinkedIn</a>
+      <a href="https://www.threads.net/@infotelbusiness.sac?xmt=AQGzAdgitncF-WO5CmByl8wolavTtqANhCjV15mXplgK6Tc" target="_blank" aria-label="Threads">
+        <i class="fab fa-threads"></i> Threads
+      </a>
+      <a href="https://wa.me/message/KDWHYGZ7EZU7H1?src=qr" target="_blank" aria-label="WhatsApp">
+        <i class="fab fa-whatsapp"></i> WhatsApp
+      </a>
+      <a href="https://www.tiktok.com/@infotel.business?is_from_webapp=1&sender_device=pc" target="_blank" aria-label="TikTok">
+        <i class="fab fa-tiktok"></i> TikTok
+      </a>
     </div>
   </div>
 </footer>
