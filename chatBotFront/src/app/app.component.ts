@@ -1,30 +1,39 @@
 import { Component } from '@angular/core';
-import { ChatService } from './chat.service';
-import {FormsModule} from '@angular/forms';
-import {NgIf} from '@angular/common'; // ✅ Importa el servicio
-import { CommonModule } from '@angular/common'; // 👈 Agrega esto
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { ChatIaComponent } from './chat-ia.component';
+import {FeaturedProductsComponent} from './featured-products.component'; // importa el componente
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [ChatIaComponent, FeaturedProductsComponent],// importa el componente aquí
   templateUrl: './app.component.html',
-  imports: [CommonModule, FormsModule],
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'chatBotFront';
-  mensaje = '';
-  respuesta: any;
+  message = '';
+  response = '';
+  userId = 1;
 
-  constructor(private chatService: ChatService) {}
+  constructor(private http: HttpClient) {}
 
-  enviar() {
-    this.chatService.enviarMensaje(this.mensaje).subscribe((res: any) => {
-      try {
-        this.respuesta = res;
-      } catch (e) {
-        console.error('Error al parsear la respuesta:', e);
-        this.respuesta = 'Error al interpretar la respuesta del servidor.';
-      }
-    });
+  enviarMensaje() {
+    if (!this.message.trim()) return;
+    const payload = { message: this.message, userId: this.userId };
+    this.http.post<string>('http://localhost:8081/api/chat/message', payload)
+      .subscribe({
+        next: res => this.response = res,
+        error: err => {
+          this.response = 'Error al comunicarse con el servidor';
+          console.error(err);
+        }
+      });
+  }
+
+  clearChat() {
+    this.message = '';
+    this.response = '';
   }
 }

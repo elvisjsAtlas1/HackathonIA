@@ -1,27 +1,35 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-chat-ia',
   templateUrl: './chat-ia.component.html',
-  imports: [
-    FormsModule
-  ],
-  styleUrls: ['./chat-ia.component.css']
+  styleUrls: ['./chat-ia.component.css'],
+  standalone: true,
+  imports: [FormsModule,CommonModule] // necesario para [(ngModel)]
 })
 export class ChatIaComponent {
-  showChat = false;
-  message = '';
-  response = '';
-  userId = 1; // Puedes cambiar esto por el usuario logueado si luego haces login
+  showChat: boolean = false; // para controlar el despliegue
+  message: string = '';
+  response: string = '';
+  userId: number = 1;
 
   constructor(private http: HttpClient) {}
 
+  // Muestra u oculta el chat al presionar el ícono
   toggleChat() {
     this.showChat = !this.showChat;
   }
 
+  // Limpia el contenido del chat
+  clearChat() {
+    this.message = '';
+    this.response = '';
+  }
+
+  // Envía mensaje al backend
   enviarMensaje() {
     if (!this.message.trim()) return;
 
@@ -30,15 +38,16 @@ export class ChatIaComponent {
       userId: this.userId
     };
 
-    this.http.post<string>('http://localhost:8081/api/chat/message', payload)
+    this.http.post('http://localhost:8081/api/chat/message', payload, { responseType: 'text' })
       .subscribe({
         next: (res) => {
-          this.response = res;
+          this.response = res; // res es texto plano, no JSON
         },
         error: (err) => {
           this.response = 'Error al comunicarse con el servidor';
           console.error(err);
         }
       });
+
   }
 }

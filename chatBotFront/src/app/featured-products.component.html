@@ -1,0 +1,18 @@
+<section class="featured-products">
+  <h2>Recomendados para ti</h2>
+  <div class="carousel-container">
+    <button class="carousel-btn left" (click)="scrollLeft()">‹</button>
+
+    <div class="product-grid" #carousel>
+      <div class="product-card" *ngFor="let product of productos">
+        <img [src]="product.image" [alt]="product.name" />
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description }}</p>
+        <span class="price">{{ product.price }}</span>
+        <button>Agregar al Carrito</button>
+      </div>
+    </div>
+
+    <button class="carousel-btn right" (click)="scrollRight()">›</button>
+  </div>
+</section>

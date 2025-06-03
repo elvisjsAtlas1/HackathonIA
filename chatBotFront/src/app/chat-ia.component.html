@@ -1,14 +1,17 @@
-<button (click)="toggleChat()" style="font-size: 24px; cursor: pointer;">
-  🤖 Hablar con IA
-</button>
+<div class="chat-wrapper">
+  <!-- Ícono que controla el despliegue -->
+  <div class="chat-icon" (click)="toggleChat()">🤖</div>
 
-<div *ngIf="showChat" style="margin-top: 10px;">
-  <textarea [(ngModel)]="message" rows="3" cols="40" placeholder="Escribe tu mensaje aquí..."></textarea>
-  <br />
-  <button (click)="enviarMensaje()">Enviar</button>
-</div>
+  <!-- Chat que aparece o desaparece -->
+  <div class="chat-box" *ngIf="showChat">
+    <div class="arrow-down"></div>
+    <button class="close-btn" (click)="toggleChat()">✖</button>
 
-<div *ngIf="response" style="margin-top: 15px; white-space: pre-wrap; border: 1px solid #ccc; padding: 10px;">
-  <strong>Respuesta IA:</strong>
-  <p>{{ response }}</p>
+    <textarea [(ngModel)]="message" placeholder="Escribe tu mensaje..."></textarea>
+    <button (click)="enviarMensaje()">Enviar</button>
+
+    <div *ngIf="response" class="chat-response">
+      <pre>{{ response }}</pre>
+    </div>
+  </div>
 </div>

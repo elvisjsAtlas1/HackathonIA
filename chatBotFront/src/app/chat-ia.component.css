@@ -1,10 +1,67 @@
-textarea {
-  width: 100%;
-  font-family: monospace;
-  font-size: 14px;
-  resize: vertical;
+.chat-wrapper {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 }
-button {
-  margin-top: 5px;
-  padding: 6px 12px;
+
+.chat-icon {
+  font-size: 40px;
+  cursor: pointer;
+  z-index: 10;
 }
+
+.chat-box {
+  position: absolute;
+  bottom: 60px;
+  right: 0;
+  width: 300px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+  z-index: 100;
+}
+.arrow-down {
+  position: absolute;
+  bottom: -10px;
+  right: 25px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid white;
+}
+
+.close-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+.chat-response {
+  max-height: 150px;           /* Limitar alto */
+  overflow-y: auto;            /* Scroll vertical si se pasa */
+  padding: 8px;
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+
+  white-space: normal !important;    /* Permitir que el texto envuelva */
+  word-wrap: break-word;              /* Forzar quiebre de palabras largas */
+  overflow-wrap: break-word;          /* Compatibilidad */
+
+  width: 100%;                       /* Para que tome el ancho del contenedor padre */
+  box-sizing: border-box;
+  font-family: monospace;            /* Opcional, para texto con formato */
+}
+.chat-response pre {
+  white-space: pre-wrap;       /* Permite hacer wrap respetando saltos */
+  word-wrap: break-word;       /* Forzar quiebre de palabras largas */
+  overflow-wrap: break-word;   /* Compatibilidad */
+  margin: 0;                   /* Opcional para no agregar espacio extra */
+}
+

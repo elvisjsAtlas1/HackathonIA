@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+/* Colores */
+:root {
+  --primary-color: #1E90FF;
+  --background-color: #F5F5F5;
+  --text-color: #000000;
+  --secondary-text-color: #555555;
+  --card-background: #FFFFFF;
+}
+
+/* Ejemplo de uso */
+.header {
+  background-color: var(--primary-color);
+  color: var(--card-background);
+  padding: 1rem;
+}
+
+.hero-banner {
+  background-color: var(--background-color);
+  text-align: center;
+  padding: 2rem;
+}
+
+.category-item, .product-card {
+  background-color: var(--card-background);
+  border: 1px solid #ddd;
+  padding: 1rem;
+  margin: 0.5rem;
+}
