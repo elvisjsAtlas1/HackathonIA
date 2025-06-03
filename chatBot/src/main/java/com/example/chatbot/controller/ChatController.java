@@ -1,42 +1,44 @@
 package com.example.chatbot.controller;
 
-
-import com.example.chatbot.dto.ChatDto;
-import com.example.chatbot.dto.ChatRequestDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import com.example.chatbot.dto.ChatRequest;
+import com.example.chatbot.dto.GroqChatResponse;
+import com.example.chatbot.dto.UserMessageRequest;
+import com.example.chatbot.service.GroqChatService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/chat")
-//@CrossOrigin("*")
-
 public class ChatController {
 
-    @Autowired
-    private WebClient groqWebClient;
+    private final GroqChatService groqChatService;
 
-    @PostMapping
-    public Mono<String> generarRespuesta(@RequestBody ChatDto chatDto) {
-        ChatRequestDto request = new ChatRequestDto(
-                "deepseek-r1-distill-llama-70b",
-                List.of(Map.of("role", "user", "content", "Simula la cantidad de stock de mi almacen"+chatDto.mensaje)),
-                0.7,
-                0.95,
-                1024,
-                false
-        );
+    public ChatController(GroqChatService groqChatService) {
+        this.groqChatService = groqChatService;
+    }
 
-        return groqWebClient.post()
-                .uri("/chat/completions")
-                .accept(MediaType.APPLICATION_JSON)
-                .bodyValue(request)
-                .retrieve()
-                .bodyToMono(String.class);
+    @PostMapping("/message")
+    public ResponseEntity<String> enviarMensaje(@RequestBody UserMessageRequest userRequest) {
+        try {
+            System.out.println("Mensaje recibido: " + userRequest.getMessage());
+            String respuesta = groqChatService.enviarMensaje(userRequest.getMessage());
+            System.out.println("Respuesta: " + respuesta);
+            return ResponseEntity.ok(respuesta);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno: " + e.getMessage());
+        }
     }
 }
