@@ -1,0 +1,92 @@
+<section id="ropa" class="category-section">
+  <h2 class="category-title">Ropa</h2>
+
+  <div class="product-grid">
+    <div class="product-card" *ngFor="let product of ropaProductos">
+      <img [src]="product.image" [alt]="product.category" />
+      <h3>{{ product.category }}</h3>
+
+      <p><strong>Modelos:</strong> {{ product.models.join(', ') }}</p>
+      <p><strong>Tallas:</strong> {{ product.sizes.join(' - ') }}</p>
+      <p><strong>Colores:</strong> {{ product.colors.join(' - ') }}</p>
+
+      <button class="btn-agregar">Agregar al Carrito</button>
+    </div>
+  </div>
+
+  <div class="ver-mas-container">
+    <button class="ver-mas-btn">Ver más</button>
+  </div>
+</section>
+
+<section id="accesorios" class="category-section">
+  <h2 class="category-title">Accesorios</h2>
+
+  <div class="product-grid">
+    <div class="product-card" *ngFor="let product of accesoriosProductos">
+      <img [src]="product.image" [alt]="product.category" />
+      <h3>{{ product.category }}</h3>
+
+      <p><strong>Modelos:</strong>
+        <span *ngFor="let model of product.models">{{ model }}<br /></span>
+      </p>
+
+      <p><strong>Colores:</strong> {{ product.colors.join(' - ') }}</p>
+
+      <button class="btn-agregar">Agregar al Carrito</button>
+    </div>
+  </div>
+
+  <div class="ver-mas-container">
+    <button class="ver-mas-btn">Ver más</button>
+  </div>
+</section>
+
+<section id="hogar" class="category-section">
+  <h2 class="category-title">Hogar</h2>
+
+  <div class="product-grid">
+    <div class="product-card" *ngFor="let product of hogarProductos">
+      <img [src]="product.image" [alt]="product.category" />
+      <h3>{{ product.category }}</h3>
+
+      <p *ngIf="product.models"><strong>Descripción:</strong><br />
+        <span *ngFor="let model of product.models">{{ model }}</span>
+      </p>
+
+      <p *ngIf="product.talla"><strong>Talla:</strong> {{ product.talla }}</p>
+
+      <p *ngIf="product.colors"><strong>Colores:</strong> {{ product.colors.join(' - ') }}</p>
+
+      <button class="btn-agregar">Agregar al Carrito</button>
+    </div>
+  </div>
+
+  <div class="ver-mas-container">
+    <button class="ver-mas-btn">Ver más</button>
+  </div>
+</section>
+<section id="servicios" class="category-section">
+  <h2 class="category-title">Servicios</h2>
+
+  <div class="product-grid">
+    <div class="product-card" *ngFor="let service of serviciosProductos">
+      <img [src]="service.image" [alt]="service.category" />
+      <h3>{{ service.category }}</h3>
+
+      <ul *ngIf="service.models">
+        <li *ngFor="let item of service.models">{{ item }}</li>
+      </ul>
+
+      <button class="btn-agregar">Solicitar Servicio</button>
+
+    </div>
+  </div>
+
+  <div class="ver-mas-container">
+    <button class="ver-mas-btn">Ver más</button>
+  </div>
+</section>
+
+
+

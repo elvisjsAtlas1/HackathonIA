@@ -38,15 +38,18 @@
 <section class="categories">
   <h2>Categorías</h2>
   <div class="category-list">
-    <div class="category-item">Ropa</div>
-    <div class="category-item">Hogar</div>
-    <div class="category-item">Servicios</div>
-    <div class="category-item">Accesorios</div>
+    <div class="category-item" (click)="scrollToSection('ropa')">Ropa</div>
+    <div class="category-item" (click)="scrollToSection('accesorios')">Accesorios</div>
+    <div class="category-item" (click)="scrollToSection('hogar')">Hogar</div>
+    <div class="category-item" (click)="scrollToSection('servicios')">Servicios</div>
+
   </div>
 </section>
 
 
 <app-featured-products></app-featured-products>
+
+<app-categories></app-categories>
 
 
 
