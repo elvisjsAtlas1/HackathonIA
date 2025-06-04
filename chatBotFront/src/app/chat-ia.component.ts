@@ -50,10 +50,8 @@ export class ChatIaComponent {
             lowerMessage.includes('conocer más sobre la empresa') ||
             lowerMessage.includes('sobre la empresa') ||
             lowerMessage.includes('empresa infotel')
-          ) {
+          )
             this.highlightConoceMas();
-            this.router.navigate(['/conoce-mas']);
-          }
         },
         error: (err) => {
           this.response = 'Error al comunicarse con el servidor';
